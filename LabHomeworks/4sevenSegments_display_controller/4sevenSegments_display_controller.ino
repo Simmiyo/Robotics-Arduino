@@ -51,6 +51,9 @@ int onId = 0;
 int digitId = 0;
 int displayedNo[] = {0,0,0,0};
 
+unsigned long prevBlink = 0;
+int dpPhase = -1;
+
 void setDigit(int id) {
   for (int index = 0; index < digitSize; index++) {
     if (index != id) {
@@ -67,10 +70,10 @@ void displayNo(int digit, byte dp) {
   digitalWrite(pinDP, dp);
 }
 
-void showNo() {
+void showNo(int dp) {
   while (digitId < digitSize) {
     setDigit(digitId);
-    displayNo(displayedNo[digitId], onId == digitId);
+    displayNo(displayedNo[digitId], dp== digitId);
     delay(5);
     digitId = digitId + 1;
   }
@@ -90,7 +93,16 @@ void setup() {
 }
 
 void loop() {
-  showNo();
+  if ((millis() - prevBlink) > 150) {
+    if(dpPhase == -1) {
+      dpPhase = onId;
+    }
+    else {
+      dpPhase = -1;
+    }
+    prevBlink = millis();
+  }
+  showNo(dpPhase);
   xValue = analogRead(pinX);
   swValue = digitalRead(pinSW);
   if (xValue > maxThreshold && joyMoved == false) {
@@ -117,7 +129,7 @@ void loop() {
     swValue = 1;
     while (swValue == 1) {
       swValue = digitalRead(pinSW);
-      showNo();
+      showNo(onId);
       yValue = analogRead(pinY);
       if (yValue > maxThreshold && joyMoved == false) {
         if (displayedNo[onId] == cardDigits - 1) {
