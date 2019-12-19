@@ -634,6 +634,7 @@ void loop() {
             score = 0;
             level = startingLevelValue;
             lives = 1;
+            newGame(0, 0, 1);
           }
           break;
         case 2:
