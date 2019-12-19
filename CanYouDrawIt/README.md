@@ -10,6 +10,9 @@ Trough this display you may also consult the list of high scores, access the set
 - two MAX7219 drivers controlling each of the matrixes.
 - a joystick to handle the player's input.
 - Arduino ("the brain").
+  Picture with the hardware: https://ibb.co/F7cjgXH
+
+  Video: https://www.youtube.com/watch?v=NOaLnt7GZxc&feature=youtu.be
 
 Game Idea:
 Level 1 and Level 2 are designed in order to train and prepare you for the adventures to come, being as basic as they can be.
