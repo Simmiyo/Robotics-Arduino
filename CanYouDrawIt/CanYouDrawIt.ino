@@ -12,7 +12,7 @@ int indexMenu = 0;
 int menuPage = 1;
 int pagesNo = 6;
 unsigned int indexSettings = 1;
-unsigned int score = 0;
+unsigned long score = 0;
 unsigned int startingLevelValue = 1;
 unsigned int infoIndex = 0;
  
@@ -22,10 +22,10 @@ const char alpha[cardAlpha] = {'A','B','C','D','E','F','G','H','I',
 const unsigned int cardName = 3;
 unsigned int letterNo = 0;
 unsigned int Name[cardName] = {0, 0, 0};
-String playerName;
+char playerName[cardName + 1];
 struct player {
-  unsigned int score;
-  String Name;
+  unsigned long score;
+  char Name[cardName + 1];
 }; 
 player currentPlayer;
 player highScorePlayer1;
@@ -513,8 +513,10 @@ void newGame(int row, int col, int lvl) {
                         } else {
                            EEPROM_readAnything(i * playerSize + 1, highScorePlayers[i]);
                         }
+                        Serial.println(score);
+                        Serial.println(highScorePlayers[i].score);
                         if (highScorePlayers[i].score < score) {
-                           currentPlayer.Name = playerName;
+                           strcpy(currentPlayer.Name, playerName);
                            currentPlayer.score = score;
                            if (i == 0) {
                                 EEPROM_writeAnything(0, currentPlayer);
@@ -530,6 +532,7 @@ void newGame(int row, int col, int lvl) {
                          EEPROM_writeAnything(i * playerSize + 1, highScorePlayers[i - 1]);
                      }
                      score = 0;
+                     level = 1;
   }
 }
 
@@ -546,16 +549,15 @@ void setup() {
   lcd.begin(16, 2);
   randomSeed(analogRead(A5));
   pinMode(pinSW, INPUT_PULLUP);
-  //pinMode(V0, OUTPUT);
+  pinMode(V0, OUTPUT);
   analogWrite(V0, contrast);
   Serial.begin(9600);
   previousTime = millis();
   generateRandomMatrix();
-  playerName.reserve(cardName);
   for(int i = 0; i < cardName; ++i) {
-    playerName.concat('A');
+    playerName[i] = 'A';
   }
-  currentPlayer.Name = playerName;
+  strcpy(currentPlayer.Name, playerName);
   currentPlayer.score = 3;
   EEPROM_writeAnything(0, currentPlayer);
   currentPlayer.score = 2;
@@ -631,7 +633,7 @@ void loop() {
             previousPressed = 1;
             score = 0;
             level = startingLevelValue;
-            lives = 3;
+            lives = 1;
           }
           break;
         case 2:
@@ -833,16 +835,21 @@ void loop() {
           buttonPressedGame = swValue;
           if (buttonPressedGame == LOW) {
             if (displayedMatrix1[currentRow][currentCol] == 0) {
-              score = score - 100 * level;  
+              //Serial.println(score);   
+              lives--;
               newGame(0,0,1);
               Serial.print("GAME OVER!");
-              lives--;
+              if(lives == 0) {
+                  Serial.println(score);            
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
             } else {
                 drawingMatrix[currentRow][currentCol] = 1;
                 registerPoint(currentRow, currentCol, drawnPoints, numberOfPoints);
                 score = score + 10 * level;
                 if (numberOfPoints == numberOfDrawPoints) {
-                  score = score - 100 * level;
                   newGame(0,0,2);
                   Serial.println("GAME WON!");
                   lives++;
@@ -856,10 +863,14 @@ void loop() {
     case 2:
       moveJoystick(xValue, yValue);
       if (displayedMatrix2[currentRow][currentCol] == 0) {
-        score = score - 100 * level;
         newGame(previousRow, previousCol, 2);
         Serial.println("GAME OVER!");
         lives--; 
+        if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
       } else {
         cursorBlink();
         if (checkIfDrawnPoint(previousRow, previousCol, numberOfPoints)) {
@@ -895,10 +906,14 @@ void loop() {
             buttonPressedGame = swValue;
             if (buttonPressedGame == LOW) {
               if (currentRow != truePoint.x || currentCol != truePoint.y) {
-                score = score - 100 * level;
                 newGame(0, 0, 3);
                 Serial.println("GAME OVER!");
                 lives--;
+                if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
               } else {
                   if (numberOfDrawPoints > 0) {
                     drawingMatrix[currentRow][currentCol] = 1;
@@ -918,10 +933,14 @@ void loop() {
         }
         previousPressedGame = swValue;
       } else {
-          score = score - 100 * level;
           newGame(0, 0, 3);
           Serial.println("GAME OVER!");
           lives--;
+          if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
       }
       break;
     case 4:
@@ -943,10 +962,14 @@ void loop() {
             buttonPressedGame = swValue;
             if (buttonPressedGame == LOW) {
               if (currentRow != truePoint.x || currentCol != truePoint.y) {
-                score = score - 100 * level;
                 newGame(0, 0, 4);
                 Serial.println("GAME OVER!");
                 lives--;
+                if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
               } else {
                   drawingMatrix[falsePoints[0].x][falsePoints[0].y] = 0;
                   if (numberOfDrawPoints > 0) {
@@ -968,10 +991,14 @@ void loop() {
         }
         previousPressedGame = swValue;
       } else {
-          score = score - 100 * level;
           newGame(0, 0, 4);
           Serial.println("GAME OVER!");
           lives--;
+          if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
       }     
       break;
     case 5:
@@ -992,10 +1019,14 @@ void loop() {
             buttonPressedGame = swValue;
             if (buttonPressedGame == LOW) {
               if (displayedMatrix5[currentRow][currentCol] == 0 || checkIfDrawnPoint(previousRow, previousCol, numberOfPoints)) {
-                score = score - 100 * level;
                 newGame(0, 0, 5);
                 Serial.println("GAME OVER!");
                 lives--;
+                if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
               } else {
                   Serial.println(numberOfDrawPoints);
                   if (numberOfDrawPoints > 1) {
@@ -1020,10 +1051,14 @@ void loop() {
         }
         previousPressedGame = swValue;
       } else {
-          score = score - 100 * level;
           newGame(0, 0, 5);
           Serial.println("GAME OVER!");
           lives--;
+          if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
       }
       break;
     case 6:
@@ -1051,7 +1086,6 @@ void loop() {
           buttonPressedGame = swValue;
           if (buttonPressedGame == LOW) {
             if (displayedMatrix6[currentRow][currentCol] == 0) {
-              score = score - 100 * level;
               newGame(0, 0, 6);
               Serial.println("GAME  OVER!");
               lives--;
@@ -1092,10 +1126,14 @@ void loop() {
               buttonPressedGame = swValue;
               if (buttonPressedGame == LOW) {
                 if (currentRow != truePoint.x || currentCol != truePoint.y) {
-                  score = score - 100 * level;
                   newGame(0, 0, level);
                   Serial.println("GAME OVER!");
                   lives--;
+                  if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
                 } else {
                     for (int i = 0; i < numberOfFalsePoints; i++) {
                       drawingMatrix[falsePoints[i].x][falsePoints[i].y] = 0;
@@ -1119,10 +1157,14 @@ void loop() {
           }
           previousPressedGame = swValue;
         } else {
-            score = score - 100 * level;
             newGame(0, 0, level);
             Serial.println("GAME OVER!");
             lives--;
+            if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
         }     
       } else {
           changeColInterval = maxInterval - 3 * level;
@@ -1153,10 +1195,14 @@ void loop() {
               buttonPressedGame = swValue;
               if (buttonPressedGame == LOW) {
                 if (displayedMatrix[currentRow][currentCol] == 0) {
-                  score = score - 100 * level;
                   newGame(0, 0, level);
                   Serial.println("GAME  OVER!");
                   lives--;
+                  if(lives == 0) {
+                  indexMenu = 1;
+                  previousPressed = 1;
+                  buttonPressed = 1;
+              }
                 } else {
                     drawingMatrix[currentRow][currentCol] = 1;
                     registerPoint(currentRow, currentCol, drawnPoints, numberOfPoints);
