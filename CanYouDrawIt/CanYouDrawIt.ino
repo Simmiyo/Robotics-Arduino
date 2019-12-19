@@ -560,12 +560,12 @@ void setup() {
     playerName[i] = 'A';
   }
   strcpy(currentPlayer.Name, playerName);
-  currentPlayer.score = 3;
-  EEPROM_writeAnything(0, currentPlayer);
-  currentPlayer.score = 2;
-  EEPROM_writeAnything(playerSize + 1, currentPlayer);
-  currentPlayer.score = 1;
-  EEPROM_writeAnything(2 * playerSize+ 1, currentPlayer);
+  //currentPlayer.score = 3;
+  //EEPROM_writeAnything(0, currentPlayer);
+  //currentPlayer.score = 2;
+  //EEPROM_writeAnything(playerSize + 1, currentPlayer);
+  //currentPlayer.score = 1;
+  //EEPROM_writeAnything(2 * playerSize+ 1, currentPlayer);
 }
 
 void loop() {
