@@ -450,8 +450,10 @@ void newGame(int row, int col, int lvl) {
         getDrawPoints(displayedMatrix1); 
         Serial.println(numberOfDrawPoints);
       } else if (lvl == 2) {
-        currentCol = 7;
-        currentRow = 7;
+        int i = random(numberOfDrawPoints);
+        points p = drawPoints[i];
+        currentCol = p.x;
+        currentRow = p.y;
         getDrawPoints(displayedMatrix2); 
       } else if (lvl == 3) {
           getDrawPoints(displayedMatrix3);
