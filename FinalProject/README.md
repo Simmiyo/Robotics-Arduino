@@ -13,7 +13,7 @@
      
      https://ibb.co/b374dFK (an image with the hardware)
      
-     Video: https://youtu.be/5U-HVZ_UWF0
+     Video: https://youtu.be/lbaO_4wK41Q
      
      
  - HOW TO USE:
