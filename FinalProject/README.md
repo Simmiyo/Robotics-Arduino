@@ -17,15 +17,15 @@
      
      
  - HOW TO USE:
-     - In order for the machine to work you would need an image and a gCode file that will tell the machine how to move in order to plot that image.
-     For the image you need to use Inkscape. It's a free and open-source software that you can find [here](https://inkscape.org/release/inkscape-0.92.4/) (version 0.48.5 is recommended). You can find tutprials for printing text and other things with Inkscape [here](https://youtu.be/KD50yDop8kQ) and [here](https://youtu.be/7BFa0k6FJcc).
-     - For the gCode files you will need to use an extension found [here](https://github.com/martymcguire/inkscape-unicorn). As color commands are not native to gCode, you will need to replace some of the files of the extension with the ones found in the unicorn folder from this repository. These files have been specifically modified in order to work with this CNC MACHINE(i.e. added color commands).
-     - Finally you will need to use the gctrl.pde processing program that will take the gCode files and upload them to the Ardunio where they will be processed. For this you will need to use [Proccesing](https://processing.org/) and the gctrl.pde aplication found [here](https://github.com/damellis/gctrl/blob/master/gctrl.pde). You will need to start Proccesing, and upload the gctrl.pde aplication to it.
+     - As an ordinary user, you don't really need to concern about following an amount of complicated steps in order to bring the mechanism to life. Everything you are expected to fulfill consists in loading an image and attaching a gCode file to the program, which will guide the moves of the device towards plotting the your picture.
+     It is warmly recommanded the usage of Inkscape, a free open-source software, that allows you to create a sketch for the machine to reproduce. You can find [here](https://inkscape.org/release/inkscape-0.92.4/) (Suggestion: version 0.48.5). However, if you have never worked with a similar software before, here are some tutorials to teach you about printing text or various icons on Inkscape [here](https://youtu.be/KD50yDop8kQ) and [here](https://youtu.be/7BFa0k6FJcc).
+     - To upload the gCode files, here is an useful extension [here](https://github.com/martymcguire/inkscape-unicorn). As color commands are not native to gCode, some files will need to be replaced in the extension with others found in the unicorn folder within this repository. These files have been specifically modified in order to work with this CNC MACHINE(i.e. added color commands).
+     - Finally, you will have to use the gctrl.pde processing program, which extracts the gCode files and uploads them to the Ardunio, the location they are processed. Use [Proccesing](https://processing.org/) and the gctrl.pde aplication found [here](https://github.com/damellis/gctrl/blob/master/gctrl.pde). Afterwards, the only task left is to start Proccesing, uploading the gctrl.pde aplication to it.
  This should bring up the following window: https://cdn.instructables.com/FAB/UNTL/IHP6UI22/FABUNTLIHP6UI22.LARGE.jpg?auto=webp&frame=1&width=528&fit=bounds
      From the opned window you can use:
-          - the arrow keyes to move the plotter in the X and Y directions
-          - the PageUp and PageDown to lift the pen and bring it down
-          - 0 in order to set home to the current direction 
-          - p to select the port that is connected to the Arduino Uno
-          - g to upload the desired gCode File 
-     - Once the gCode file is uploaded the CNC MACHINE will start to do it's job. When the color will need to be changed the user will be alerted by the Blue LED, which will light up, and by the Buzzeer, which will play a tune of 1K HZ for the duration of 10 sec(the time in which the user has to change the color). If the user doesn't change the color the Led and the buzzer will turn off and the plotter will keep going from where it left.  
+          - the arrow keyes - to move the plotter along the X and Y axis;
+          - the PageUp and PageDown - to lift the pen and bring it back down;
+          - 0 - to set home to the current direction (i.e. establish the starting point); 
+          - p - to select the port that is connected to Arduino Uno;
+          - g - to upload the desired gCode File. 
+     - Once the gCode file is uploaded, the DRAWING MACHINE will begin doing its job. The machine offers you the opportunity to change the color of the ink by pausing the drawing process. This break is alerted by the Blue LED, which lights up, and by the Buzzeer, which plays a tune of 1K HZ for the duration of 10 sec (the time in which the user is allowed to change the color). After this mentioned period of time, the Led and the buzzer turn off and the plotter continues drawing from where it left.  
